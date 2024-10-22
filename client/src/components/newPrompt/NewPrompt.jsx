@@ -13,10 +13,7 @@ const NewPrompt = () => {
       {/* ADD NEW CHAT */}
       <div className="endChat"></div>
       <form className="newForm">
-        <label htmlFor="file">
-          {/* the label is for the file input for uploading images */}
-          <img src="/attachment.png" alt="" />
-        </label>{" "}
+        <Upload />
         <input id="file" type="file" multiple={false} hidden />
         <input type="text" placeholder="Ask me anything..." />
         <button>
