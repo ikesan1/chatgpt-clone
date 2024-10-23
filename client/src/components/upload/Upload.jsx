@@ -1,4 +1,4 @@
-import { IKContext, IKImage } from "imagekitio-react";
+import { IKContext, IKImage, IKUpload } from "imagekitio-react";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
 const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
@@ -22,13 +22,14 @@ const authenticator = async () => {
   }
 };
 
-const Upload = () => {
+const Upload = ({ setImg }) => {
   const onError = (err) => {
     console.log("Error", err);
   };
 
   const onSuccess = (res) => {
     console.log("Success", res);
+    setImg((prev) => ({ ...prev, isLoading: false, dbData: res })); // Set loading state to false when upload is successful
   };
 
   const onUploadProgress = (progress) => {
@@ -37,6 +38,7 @@ const Upload = () => {
 
   const onUploadStart = (evt) => {
     console.log("Start", evt);
+    setImg((prev) => ({ ...prev, isLoading: true })); // Set loading state to true when upload starts
   };
 
   return (

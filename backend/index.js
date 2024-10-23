@@ -1,11 +1,19 @@
 import express from "express";
 import ImageKit from "imagekit";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
 const port = process.env.PORT || 3000;
 const app = express();
+
+// Use the CORS middleware to allow cross-origin requests
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
 
 const imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
