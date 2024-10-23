@@ -29,7 +29,7 @@ const NewPrompt = () => {
           transformation={[{ width: 380 }]} // Resize the image to 380px width on the server side
         />
       )}
-      {console.log(img.dbData)}
+      {/* {console.log(img.dbData)} */}
       <div className="endChat"></div>
       <form className="newForm">
         <Upload setImg={setImg} />
