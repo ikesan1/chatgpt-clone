@@ -4,6 +4,8 @@ import Upload from "../upload/Upload";
 import { useState } from "react";
 import { IKImage } from "imagekitio-react";
 
+import model from "../../lib/openai";
+
 const NewPrompt = () => {
   const [img, setImg] = useState({
     isLoading: false,
@@ -16,6 +18,14 @@ const NewPrompt = () => {
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
+
+  const add = async () => {
+    const prompt = "Write a very short poem about the blue skies.";
+
+    const result = await model(prompt);
+    const response = result.choices[0].message.content;
+    console.log(response);
+  };
 
   return (
     <>
@@ -30,6 +40,7 @@ const NewPrompt = () => {
         />
       )}
       {/* {console.log(img.dbData)} */}
+      <button onClick={add}>TEST AI</button>
       <div className="endChat"></div>
       <form className="newForm">
         <Upload setImg={setImg} />
