@@ -7,6 +7,8 @@ import { IKImage } from "imagekitio-react";
 import model from "../../lib/openai";
 
 const NewPrompt = () => {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [img, setImg] = useState({
     isLoading: false,
     error: "",
@@ -19,12 +21,22 @@ const NewPrompt = () => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const add = async () => {
-    const prompt = "Write a very short poem about the blue skies.";
+  const add = async (text) => {
+    setQuestion(text);
+    console.log("text", text);
 
-    const result = await model(prompt);
+    const result = await model(text);
     const response = result.choices[0].message.content;
     console.log(response);
+    setAnswer(response);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const text = e.target.text.value;
+    if (!text) return;
+    add(text);
   };
 
   return (
@@ -39,18 +51,17 @@ const NewPrompt = () => {
           transformation={[{ width: 380 }]} // Resize the image to 380px width on the server side
         />
       )}
-      {/* {console.log(img.dbData)} */}
-      <button onClick={add}>TEST AI</button>
-      <div className="endChat"></div>
-      <form className="newForm">
+      {question && <div className="message user">{question}</div>}
+      {answer && <div className="message">{answer}</div>}
+      <div className="endChat" ref={endRef}></div>
+      <form className="newForm" onSubmit={handleSubmit}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
-        <input type="text" placeholder="Ask me anything..." />
+        <input type="text" name="text" placeholder="Ask me anything..." />
         <button>
           <img src="/arrow.png" alt="" />
         </button>
       </form>
-      <div ref={endRef}></div>
     </>
   );
 };
