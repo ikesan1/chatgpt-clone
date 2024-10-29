@@ -3,6 +3,7 @@ import "./newPrompt.css";
 import Upload from "../upload/Upload";
 import { useState } from "react";
 import { IKImage } from "imagekitio-react";
+import Markdown from "react-markdown";
 
 import model from "../../lib/openai";
 
@@ -19,7 +20,7 @@ const NewPrompt = () => {
 
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [question, answer, img.dbData]);
 
   const add = async (text) => {
     setQuestion(text);
@@ -52,7 +53,11 @@ const NewPrompt = () => {
         />
       )}
       {question && <div className="message user">{question}</div>}
-      {answer && <div className="message">{answer}</div>}
+      {answer && (
+        <div className="message">
+          <Markdown>{answer}</Markdown>
+        </div>
+      )}
       <div className="endChat" ref={endRef}></div>
       <form className="newForm" onSubmit={handleSubmit}>
         <Upload setImg={setImg} />
