@@ -3,6 +3,7 @@ import "./newPrompt.css";
 import Upload from "../upload/Upload";
 import { useState } from "react";
 import { IKImage } from "imagekitio-react";
+import model from "../../lib/gemini";
 
 const NewPrompt = () => {
   const [img, setImg] = useState({
@@ -17,6 +18,15 @@ const NewPrompt = () => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, []);
 
+  const add = async () => {
+    const prompt = "Write a story about a magic backpack.";
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log(text);
+  };
+
   return (
     <>
       {/* ADD NEW CHAT */}
@@ -30,6 +40,7 @@ const NewPrompt = () => {
         />
       )}
       {console.log(img.dbData)}
+      <button onClick={add}>TEST ADD</button>
       <div className="endChat"></div>
       <form className="newForm">
         <Upload setImg={setImg} />
