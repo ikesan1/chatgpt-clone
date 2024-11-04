@@ -16,6 +16,22 @@ const NewPrompt = () => {
     aiData: {},
   });
 
+  const chat = model.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello, I have 2 dogs in my house." }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
+    generationConfig: {
+      // maxOutputTokens: 100,
+    },
+  });
+
   const endRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +40,7 @@ const NewPrompt = () => {
 
   const add = async (text) => {
     setQuestion(text); // Set the question state to the text because the model.generateContent function uses the question state
-    const result = await model.generateContent(
+    const result = await chat.sendMessage(
       Object.entries(img.aiData).length ? [img.aiData, text] : [text]
     ); // If there is an image, pass the image data and the text to the model.generateContent function as an array, otherwise pass only the text
     const response = await result.response;
