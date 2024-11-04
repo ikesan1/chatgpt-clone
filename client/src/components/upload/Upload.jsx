@@ -40,8 +40,22 @@ const Upload = ({ setImg }) => {
   };
 
   const onUploadStart = (evt) => {
-    console.log("Start", evt);
-    setImg((prev) => ({ ...prev, isLoading: true })); // Set loading state to true when upload starts
+    const file = evt.target.files[0];
+
+    const reader = new FileReader(); // Create a new FileReader object to read the file
+    reader.onloadend = () => {
+      setImg((prev) => ({
+        ...prev,
+        isLoading: true,
+        aiData: {
+          inlineData: {
+            data: reader.result.split(",")[1],
+            mimeType: file.type,
+          },
+        },
+      })); // Set loading state to true when upload starts
+    };
+    reader.readAsDataURL(file); // Read the file as a data URL
   };
 
   return (
