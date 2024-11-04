@@ -40,12 +40,15 @@ const NewPrompt = () => {
 
   const add = async (text) => {
     setQuestion(text); // Set the question state to the text because the model.generateContent function uses the question state
-    const result = await chat.sendMessage(
+    const result = await chat.sendMessageStream(
       Object.entries(img.aiData).length ? [img.aiData, text] : [text]
     ); // If there is an image, pass the image data and the text to the model.generateContent function as an array, otherwise pass only the text
-    const response = await result.response;
-    const answerText = await response.text();
-    setAnswer(answerText);
+    let accumulatedText = "";
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      accumulatedText += chunkText;
+      setAnswer(accumulatedText);
+    }
     setImg({ isLoading: false, error: "", dbData: {}, aiData: {} });
   };
 
