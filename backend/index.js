@@ -2,11 +2,11 @@ import express from "express";
 import ImageKit from "imagekit";
 import dotenv from "dotenv";
 import cors from "cors";
-
-dotenv.config();
+import mongoose from "mongoose";
 
 const port = process.env.PORT || 3000;
 const app = express();
+dotenv.config();
 
 // Use the CORS middleware to allow cross-origin requests
 app.use(
@@ -14,6 +14,18 @@ app.use(
     origin: process.env.CLIENT_URL,
   })
 );
+
+const connect = async () => {
+  try {
+    console.log("Connecting to MongoDB...", process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log(
+      `Successfully Connected to MongoDB\nServer running on port ${port}`
+    );
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+};
 
 const imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
@@ -27,5 +39,5 @@ app.get("/api/upload", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  connect();
 });
