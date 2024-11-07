@@ -8,7 +8,11 @@ const chatSchema = new mongoose.Schema(
     },
     history: [
       {
-        role: { String, enum: ["user", "model"], required: true },
+        role: {
+          type: String,
+          enum: ["user", "model"],
+          required: true,
+        },
 
         parts: [
           {
@@ -28,4 +32,4 @@ const chatSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model.chat || mongoose.model("chat", chatSchema);
+export default mongoose.models.chat || mongoose.model("chat", chatSchema);
