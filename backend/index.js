@@ -17,7 +17,7 @@ app.use(
 
 const connect = async () => {
   try {
-    console.log("Connecting to MongoDB...", process.env.MONGO_URI);
+    console.log("Connecting to MongoDB...");
     await mongoose.connect(process.env.MONGO_URI);
     console.log(
       `Successfully Connected to MongoDB\nServer running on port ${port}`
