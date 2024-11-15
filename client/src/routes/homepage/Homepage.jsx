@@ -13,8 +13,9 @@ const Homepage = () => {
         <h1>TOYAI</h1>
         <h2>Supercharge Your Child's Develoment</h2>
         <h3>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam non
-          nostrum, beatae a recusandae quae asperiores ipsam ratione?
+          Give your child access to unlimited knowledge and learning with ToyAI.
+          Our AI-powered toys are designed to help your child learn and grow in
+          a fun and interactive way.
         </h3>
         <Link to={"/dashboard"}>Get Started</Link>
       </div>

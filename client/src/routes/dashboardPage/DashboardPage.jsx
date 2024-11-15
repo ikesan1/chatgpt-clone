@@ -1,6 +1,38 @@
 import "./dashboardPage.css";
+import { useAuth } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
 
 const DashboardPage = () => {
+  const { userId } = useAuth();
+  const [isLoading, setIsLoading] = useState(true); // Initialize loading state
+
+  useEffect(() => {
+    // Check if userId is available
+    if (userId) {
+      setIsLoading(false); // Set loading to false when userId is ready
+    }
+  }, [userId]); // Re-run this effect when userId changes
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const text = e.target.text.value;
+    if (!text) return;
+    console.log(text);
+
+    await fetch("http://localhost:3000/api/chats", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, text }),
+    });
+  };
+
+  if (isLoading) {
+    // Render a loading indicator while waiting for userId
+    return <div className="loading">Loading...</div>;
+  }
+
   return (
     <div className="dashboardPage">
       <div className="texts">
@@ -28,8 +60,8 @@ const DashboardPage = () => {
         </div>
       </div>
       <div className="formContainer">
-        <form>
-          <input type="text" placeholder="Ask me anything..." />
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="text" placeholder="Ask me anything..." />
           <button>
             <img src="/arrow.png" alt="" />
           </button>
