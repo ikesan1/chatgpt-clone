@@ -5,6 +5,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import Chat from "./models/chat.js";
 import UserChats from "./models/userChats.js";
+import { requireAuth } from "@clerk/express";
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -14,6 +15,7 @@ dotenv.config();
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
+    credentials: true,
   })
 );
 
@@ -42,7 +44,14 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
-app.post("/api/chats", async (req, res) => {
+app.get("/api/test", requireAuth(), (req, res) => {
+  const userId = req.auth.userId;
+  console.log("Success!");
+  console.log("Clerk user ID:", userId);
+  res.send("Success!");
+});
+
+app.post("/api/chats", requireAuth(), async (req, res) => {
   const { userId, text } = req.body;
 
   // Validation for required fields
@@ -106,6 +115,11 @@ app.post("/api/chats", async (req, res) => {
     console.error("Error creating chat:", err);
     res.status(500).send({ error: "Error creating chat" });
   }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(401).send("Unauthenticated!");
 });
 
 app.listen(port, () => {
